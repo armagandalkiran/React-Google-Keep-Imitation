@@ -1,12 +1,21 @@
 import React, { useState } from "react";
-
+import AddIcon from '@material-ui/icons/Add';
+import Fab from '@material-ui/core/Fab';
+import Zoom from '@material-ui/core/Zoom';
 
 function CreateArea(props) {
   
+
+
   const [note,setNote] = useState({
     title:"",
     content:""
   }); 
+
+  const [clicked,setClicked] = useState({
+    rowNumber:1,
+    isClicked:false
+  })
 
   function CreateNotes (event) {
     const {name,value} = event.target;
@@ -27,12 +36,25 @@ function CreateArea(props) {
     event.preventDefault();
   }
 
+  function ExpandTextArea (){
+    setClicked({
+      rowNumber:3,
+      isClicked:true
+    })
+  }
+
   return (
     <div>
-      <form>
-        <input onChange={CreateNotes} name="title" placeholder="Title" value={note.title} />
-        <textarea onChange={CreateNotes} name="content" placeholder="Take a note..." rows="3" value={note.content}/>
-        <button onClick={submitNote}>Add</button>
+      <form className="create-note">
+        {clicked.isClicked ? <input onChange={CreateNotes} name="title" placeholder="Title" value={note.title} 
+          />: null
+        }
+        <textarea onClick={ExpandTextArea} onChange={CreateNotes} name="content" placeholder="Take a note..." rows={clicked.rowNumber} value={note.content}/>
+        <Zoom in = {clicked.isClicked}>
+        <Fab onClick={submitNote}>
+          <AddIcon/>
+        </Fab>
+        </Zoom>
       </form>
     </div>
   );
